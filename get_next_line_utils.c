@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aarranz- <aarranz-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: arranz <arranz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/28 12:27:59 by aarranz-          #+#    #+#             */
-/*   Updated: 2023/08/28 12:34:46 by aarranz-         ###   ########.fr       */
+/*   Updated: 2023/08/28 20:06:16 by arranz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,4 +66,53 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	}
 	str1[i] = '\0';
 	return (str1);
+}
+
+char	*ft_substr(char const *s, unsigned int start, size_t len)
+{
+	char	*str;
+	size_t	length;
+	size_t	i;
+	size_t	k;
+
+	if (!s)
+		return (NULL);
+	length = len;
+	i = start;
+	k = 0;
+	if (start >= ft_strlen(s))
+		return (ft_strdup(""));
+	if (ft_strlen(s + start) <= len)
+		length = ft_strlen(s + start);
+	str = malloc(sizeof(char) * (length + 1));
+	if (str == NULL)
+		return (NULL);
+	while (length-- && s[i])
+	{
+		str[k] = s[i];
+		i++;
+		k++;
+	}
+	str[k] = '\0';
+	return (str);
+}
+
+char	*ft_strdup(const char *s1)
+{
+	char	*str;
+	size_t	i;
+	size_t	len;	
+
+	i = 0;
+	len = ft_strlen(s1);
+	str = malloc(sizeof(char) * len + 1);
+	if (str == NULL)
+		return (NULL);
+	while (s1[i] != '\0')
+	{
+		str[i] = s1[i];
+		i++;
+	}
+	str[i] = s1[i];
+	return (str);
 }
