@@ -6,60 +6,106 @@
 /*   By: arranz <arranz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/28 10:21:27 by aarranz-          #+#    #+#             */
-/*   Updated: 2023/08/28 21:33:15 by arranz           ###   ########.fr       */
+/*   Updated: 2023/09/16 13:51:07 by arranz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-size_t	ft_detect(const char *s)
+char	*ft_read(char *s, int fd)
 {
-	size_t	i;
+	char	*buf;
+	int		r;
 
-	i = 0;
-	while (s[i])
+	buf = (char *)malloc(sizeof(char) * (BUFFER_SIZE + 1));
+	if (!buf)
+		return (NULL);
+	r = 1;
+	while (ft_strchr(s, '\n') == NULL && r != 0)
 	{
-		if (s[i] == '\n')
-			return (1);
-		i++;
+		r = read(fd, buf, BUFFER_SIZE);
+		if (r == -1)
+		{
+			free(buf);
+			return (NULL);
+		}
+		buf[r] = '\0';
+		s = ft_strjoin(s, buf);
 	}
-	return (0);
+	free(buf);
+	return (s);
 }
 
-size_t	ft_strlen_line(const char *str)
+char	*change_the_static(char *s)
 {
+	char	*news;
+	size_t	i;
+	size_t	l;
+
+	l = 0;
+	while (s[l] != '\n' && s[l] != '\0')
+		l++;
+	if (ft_strlen(s) == l)
+	{
+		free(s);
+		return (NULL);
+	}
+	news = (char *)malloc((ft_strlen(s) - l + 1) * sizeof(char));
+	if (news == NULL)
+		return (NULL);
+	i = 0;
+	while (s[l++])
+	{
+		news[i] = s[l];
+		i++;
+	}
+	news[i] = '\0';
+	free(s);
+	return (news);
+}
+
+char	*get_line(char *res)
+{
+	char	*line;
+	size_t	l;
 	size_t	i;
 
+	l = 0;
+	if (res[0] == '\0')
+		return (NULL);
+	while (res[l] != '\n' && res[l] != '\0')
+		l++;
+	if (res[l] == '\n')
+		l++;
+	line = (char *)malloc(sizeof(char) * l + 1);
+	if (line == NULL)
+		return (NULL);
 	i = 0;
-	while (str[i] != '\n' || str[i] != '\0')
+	while (i < l)
+	{
+		line[i] = res[i];
 		i++;
-	if (str[i] == '\n')
-		i++;
-	return (i);
+	}
+	line[i] = '\0';
+	return (line);
 }
 
 char	*get_next_line(int fd)
 {
-	static char		*temp;
-	char			*buff;
-	char			*line;
-	size_t			r;
-	int				i;
-	
-	i = 0;
-	temp = malloc(sizeof(char) * 1);
-	line = malloc(sizeof(char) * 1);
-	buff = malloc(sizeof(char) * (BUFFER_SIZE));
-	while (ft_detect(temp) == 0)
-	{
-	r = read (fd, buff, BUFFER_SIZE);
-	temp = ft_strjoin(temp, buff);
-	}
-	line= ft_substr(temp, 0, ft_strlen_line(temp));
-	return (line);
+	static char	*s;
+	char		*buf;
+
+	if (fd < 0 || BUFFER_SIZE <= 0)
+		return (NULL);
+	s = ft_read(s, fd);
+	if (s == NULL)
+		return (NULL);
+	buf = get_line(s);
+	s = change_the_static(s);
+	return (buf);
 }
 
-int	main(void)
+/*int	main(void)
 {
 	int	fd;
 
@@ -68,6 +114,27 @@ int	main(void)
 	printf("------\n");
 	printf("%s", get_next_line(fd));
 	printf("------\n");
+	printf("%s", get_next_line(fd));
+	printf("------\n");
+	printf("%s", get_next_line(fd));
+	printf("------\n");
+	printf("%s", get_next_line(fd));
+	printf("------\n");
+	printf("%s", get_next_line(fd));
+	printf("------\n");
+	printf("%s", get_next_line(fd));
+	printf("------\n");
+	printf("%s", get_next_line(fd));
+	printf("------\n");
+	printf("%s", get_next_line(fd));
+	printf("------\n");
+	printf("%s", get_next_line(fd));
+	printf("------\n");
+	printf("%s", get_next_line(fd));
+	printf("------\n");
+	printf("%s", get_next_line(fd));
+	printf("------\n");
+
 
 	close(fd);
-}
+}*/

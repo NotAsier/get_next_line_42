@@ -6,7 +6,7 @@
 /*   By: arranz <arranz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/28 10:26:45 by aarranz-          #+#    #+#             */
-/*   Updated: 2023/08/28 21:29:00 by arranz           ###   ########.fr       */
+/*   Updated: 2023/09/16 13:11:05 by arranz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,16 +21,14 @@
 #  define BUFFER_SIZE 6
 # endif
 
-size_t	ft_detect(const char *s);
-size_t	ft_strlen_line(const char *str);
+//get_next_line.c
+char	*ft_read(char *s, int fd);
+char	*change_the_static(char *s);
+char	*get_line(char *res);
 char	*get_next_line(int fd);
 
-int main(void);
-
-size_t	ft_strlen(const char *str);
-size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize);
-char	*ft_strjoin(char const *s1, char const *s2);
-char	*ft_substr(char const *s, unsigned int start, size_t len);
-char	*ft_strdup(const char *s1);
-
+//get_next_line_utils.c
+char	*ft_strchr(char *s, int c);
+size_t	ft_strlen(const char *s);
+char	*ft_strjoin(char *s1, char *s2);
 #endif // GET_NEXT_LINE_H
